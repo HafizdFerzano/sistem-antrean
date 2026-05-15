@@ -87,7 +87,7 @@ export default function Sidebar({
       <div className={`px-6 py-6 border-b ${theme.divider}`}>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center border border-white/20">
-            <img src="/logo.png" alt="Lautan Teduh" style={{ width: 24, height: 24, filter: 'brightness(0) invert(1)' }} />
+            <span className="material-symbols-outlined text-white" style={{ fontSize: 24, fontVariationSettings: "'FILL' 1" }}>two_wheeler</span>
           </div>
           <div>
             <h1 className={`font-bold text-lg leading-tight ${theme.brandColor}`}>Lautan Teduh</h1>

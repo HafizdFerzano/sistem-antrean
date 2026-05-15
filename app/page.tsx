@@ -66,7 +66,7 @@ export default function LoginPage() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
             }}>
-              <img src="/logo.svg" alt="Lautan Teduh Logo" style={{ width: 26, height: 26, filter: 'brightness(0) invert(1)' }} />
+              <span className="material-symbols-outlined text-white" style={{ fontSize: 26, fontVariationSettings: "'FILL' 1" }}>two_wheeler</span>
             </div>
             <div>
               <p style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Lautan Teduh</p>
@@ -168,7 +168,7 @@ export default function LoginPage() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 4px 12px rgba(0,44,96,0.3)',
             }}>
-              <img src="/logo.svg" alt="Lautan Teduh" style={{ width: 22, height: 22, filter: 'brightness(0) invert(1)' }} />
+              <span className="material-symbols-outlined text-white" style={{ fontSize: 22, fontVariationSettings: "'FILL' 1" }}>two_wheeler</span>
             </div>
             <div>
               <p style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#002c60', lineHeight: 1.1 }}>Lautan Teduh</p>
