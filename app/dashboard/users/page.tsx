@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { clientFetch } from '@/lib/api';
 import { User, Cabang, ApiResponse } from '@/types';
+import { confirmDelete, confirmAction, toastSuccess, toastError } from '@/lib/swal';
+
 
 type AdminForm = {
   name: string;
@@ -285,14 +287,19 @@ export default function UsersPage() {
 
   // Hapus admin
   const handleDelete = async (u: User) => {
-    if (!confirm(`Hapus akun admin "${u.name}"?\nTindakan ini tidak dapat dibatalkan.`)) return;
+    const ok = await confirmDelete(
+      `Hapus Admin "${u.name}"?`,
+      `Akun <strong>${u.username ?? u.name}</strong> akan dihapus permanen dari sistem.<br/>Tindakan ini <strong>tidak dapat dibatalkan</strong>.`,
+      'Hapus Akun',
+    );
+    if (!ok) return;
     setDeleteLoading(u.id);
     try {
       await clientFetch(`/users/${u.id}`, { method: 'DELETE' });
-      showToast(`Admin "${u.name}" berhasil dihapus.`);
+      toastSuccess(`Admin "${u.name}" berhasil dihapus.`);
       await loadAdmins();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'Gagal menghapus admin', false);
+      toastError(e instanceof Error ? e.message : 'Gagal menghapus admin');
     } finally {
       setDeleteLoading(null);
     }
@@ -300,14 +307,19 @@ export default function UsersPage() {
 
   // Unassign: lepas admin dari cabang (jadi Super Admin)
   const handleUnassign = async (u: User) => {
-    if (!confirm(`Lepas "${u.name}" dari cabangnya?\nAdmin ini akan menjadi Super Admin (tidak terikat cabang).`)) return;
+    const ok = await confirmAction(
+      `Lepas "${u.name}" dari Cabang?`,
+      `Admin ini akan dilepas dari cabangnya dan berubah menjadi <strong>Super Admin</strong> yang tidak terikat ke cabang manapun.`,
+      'Ya, Lepas dari Cabang',
+    );
+    if (!ok) return;
     setDeleteLoading(u.id);
     try {
       await clientFetch(`/super/admins/${u.id}/assign`, { method: 'DELETE' });
-      showToast(`"${u.name}" berhasil dilepas dari cabang.`);
+      toastSuccess(`"${u.name}" berhasil dilepas dari cabang.`);
       await loadAdmins();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'Gagal melepas admin dari cabang', false);
+      toastError(e instanceof Error ? e.message : 'Gagal melepas admin dari cabang');
     } finally {
       setDeleteLoading(null);
     }

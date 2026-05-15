@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { clientFetch } from '@/lib/api';
 import { Antrian, AntrianStatus, ApiResponse, Cabang } from '@/types';
+import { confirmDelete, toastSuccess, toastError } from '@/lib/swal';
 
 // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Helpers Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 function StatusBadge({ status }: { status: AntrianStatus | string }) {
@@ -341,7 +342,7 @@ export default function AntrianPage() {
         throw new Error(errMsg);
       }
 
-      // Ã¢â€â‚¬Ã¢â€â‚¬ Umumkan nomor antrian via Web Speech API (TTS) Ã¢â€â‚¬Ã¢â€â‚¬
+      // ——— Umumkan nomor antrian via Web Speech API (TTS) ———
       const nomorDipanggil = resData?.data?.nomor_antrian;
       if (nomorDipanggil && typeof window !== 'undefined' && 'speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(
@@ -381,15 +382,20 @@ export default function AntrianPage() {
       showToast('Super Admin tidak dapat menghapus antrian.', false);
       return;
     }
-    if (!confirm(`Hapus antrian #${nomorAntrian}? Tindakan ini tidak dapat dibatalkan.`)) return;
+    const ok = await confirmDelete(
+      `Hapus Antrian #${nomorAntrian}?`,
+      `Antrian ini akan <strong>dihapus / dibatalkan</strong> dari sistem.<br/>Tindakan ini <strong>tidak dapat dibatalkan</strong>.`,
+      'Hapus Antrian',
+    );
+    if (!ok) return;
     setLoadingId(id);
     try {
       // Dokumentasi: DELETE /antrian/:id Ã¢â‚¬â€ Hapus/batalkan antrian
       await clientFetch(`/antrian/${id}`, { method: 'DELETE' });
-      showToast(`Antrian #${nomorAntrian} berhasil dihapus.`);
+      toastSuccess(`Antrian #${nomorAntrian} berhasil dihapus.`);
       setSelected(null);
       await loadAntrian();
-    } catch (e: unknown) { showToast(e instanceof Error ? e.message : 'Gagal menghapus antrian', false); }
+    } catch (e: unknown) { toastError(e instanceof Error ? e.message : 'Gagal menghapus antrian'); }
     finally { setLoadingId(null); }
   }
 
