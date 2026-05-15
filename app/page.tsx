@@ -109,10 +109,10 @@ export default function LoginPage() {
           {/* Feature cards */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
-              { icon: 'storefront',           label: 'Multi-Cabang',             desc: 'Pantau semua cabang dalam satu dashboard',  color: '#64b5f6' },
-              { icon: 'admin_panel_settings', label: 'Akses Berbasis Peran',     desc: 'Super Admin & Admin Cabang terpisah',       color: '#81c784' },
-              { icon: 'record_voice_over',    label: 'Panggil Antrian Otomatis', desc: 'TTS otomatis saat nomor dipanggil',         color: '#ffb74d' },
-              { icon: 'monitoring',           label: 'Monitor Real-time',        desc: 'Status antrian diperbarui secara langsung', color: '#ce93d8' },
+              { icon: 'storefront', label: 'Multi-Cabang', desc: 'Pantau semua cabang dalam satu dashboard', color: '#64b5f6' },
+              { icon: 'admin_panel_settings', label: 'Akses Berbasis Peran', desc: 'Super Admin & Admin Cabang terpisah', color: '#81c784' },
+              { icon: 'record_voice_over', label: 'Panggil Antrian Otomatis', desc: 'TTS otomatis saat nomor dipanggil', color: '#ffb74d' },
+              { icon: 'monitoring', label: 'Monitor Real-time', desc: 'Status antrian diperbarui secara langsung', color: '#ce93d8' },
             ].map(({ icon, label, desc, color }) => {
               const rgba = color === '#64b5f6' ? '100,181,246' : color === '#81c784' ? '129,199,132' : color === '#ffb74d' ? '255,183,77' : '206,147,216';
               return (
@@ -147,7 +147,7 @@ export default function LoginPage() {
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)',
           }}>
-            <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>© 2024 Lautan Teduh. All rights reserved.</p>
+            <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>© 2026 Lautan Teduh. All rights reserved.</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4caf50', boxShadow: '0 0 6px #4caf50' }} />
               <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 500 }}>v1.0 Online</span>
@@ -207,7 +207,7 @@ export default function LoginPage() {
           <div style={{ marginBottom: 16, background: '#e4ecf8', borderRadius: 14, padding: 4, display: 'flex', gap: 4 }}>
             {([
               { id: 'superadmin', icon: 'admin_panel_settings', label: 'Kantor Pusat' },
-              { id: 'cabang',     icon: 'storefront',            label: 'Admin Cabang' },
+              { id: 'cabang', icon: 'storefront', label: 'Admin Cabang' },
             ] as const).map(tab => {
               const active = activeTab === tab.id;
               const isSA = tab.id === 'superadmin';
