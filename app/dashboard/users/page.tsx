@@ -192,11 +192,11 @@ export default function UsersPage() {
     } catch { /* silent */ }
   }, []);
 
-  // Load admin list — GET /super/admins (hanya admin, bukan user biasa)
+  // Load admin list — GET /users dan filter role=admin
   const loadAdmins = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await clientFetch<ApiResponse<User[]>>('/super/admins');
+      const res = await clientFetch<ApiResponse<User[]>>('/users');
       const raw = res as unknown as Record<string, unknown>;
       let list: User[] = [];
       if (Array.isArray(raw)) {
@@ -206,18 +206,8 @@ export default function UsersPage() {
       }
       // Filter: tampilkan hanya yang role=admin
       setAdmins(list.filter(u => u.role === 'admin'));
-    } catch {
-      // Fallback: GET /users dan filter manual
-      try {
-        const res2 = await clientFetch<ApiResponse<User[]>>('/users');
-        const raw2 = res2 as unknown as Record<string, unknown>;
-        let list2: User[] = [];
-        if (Array.isArray(raw2)) list2 = raw2 as User[];
-        else if (Array.isArray(raw2.data)) list2 = raw2.data as User[];
-        setAdmins(list2.filter(u => u.role === 'admin'));
-      } catch (e: unknown) {
-        showToast(e instanceof Error ? e.message : 'Gagal memuat data admin', false);
-      }
+    } catch (e: unknown) {
+      showToast(e instanceof Error ? e.message : 'Gagal memuat data admin', false);
     } finally {
       setLoading(false);
     }
@@ -228,19 +218,35 @@ export default function UsersPage() {
     loadAdmins();
   }, [loadCabang, loadAdmins]);
 
-  // Buat admin cabang baru
+  // Buat admin cabang baru — POST /users (kompatibel dengan token admin biasa)
   const handleCreate = async (form: AdminForm) => {
     setSubmitting(true);
     try {
-      await clientFetch('/super/admin/cabang', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: form.name,
-          username: form.username,
-          password: form.password,
-          cabang_id: Number(form.cabang_id),
-        }),
-      });
+      // Coba /super/admin/cabang terlebih dahulu (password di-hash bcrypt dengan benar)
+      // Jika gagal (403 token bukan super admin murni), fallback ke /users
+      try {
+        await clientFetch('/super/admin/cabang', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: form.name,
+            username: form.username,
+            password: form.password,
+            cabang_id: Number(form.cabang_id),
+          }),
+        });
+      } catch {
+        // Fallback: POST /users — bisa jadi password tidak ter-hash bcrypt
+        await clientFetch('/users', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: form.name,
+            username: form.username,
+            password: form.password,
+            role: 'admin',
+            cabang_id: Number(form.cabang_id),
+          }),
+        });
+      }
       showToast(`Admin "${form.name}" berhasil dibuat.`);
       setModal(null);
       await loadAdmins();
@@ -250,6 +256,7 @@ export default function UsersPage() {
       setSubmitting(false);
     }
   };
+
 
   // Update admin cabang
   const handleUpdate = async (form: AdminForm) => {

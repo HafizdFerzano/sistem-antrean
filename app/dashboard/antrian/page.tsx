@@ -5,13 +5,13 @@ import { clientFetch } from '@/lib/api';
 import { Antrian, AntrianStatus, ApiResponse, Cabang } from '@/types';
 
 // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Helpers Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
-function StatusBadge({ status }: { status: AntrianStatus }) {
-  const cfg = {
+function StatusBadge({ status }: { status: AntrianStatus | string }) {
+  const cfg: Record<string, { cls: string; label: string }> = {
     menunggu:  { cls: 'bg-tertiary-fixed text-tertiary',       label: 'Menunggu' },
     dipanggil: { cls: 'bg-[#dbeafe] text-[#1d4ed8]',           label: 'Dipanggil' },
     selesai:   { cls: 'bg-[#dcfce7] text-[#15803d]',           label: 'Selesai' },
   };
-  const { cls, label } = cfg[status];
+  const { cls, label } = cfg[status] ?? { cls: 'bg-surface-container text-on-surface-variant', label: status };
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold ${cls}`}>{label}</span>;
 }
 
@@ -218,7 +218,6 @@ function StatCard({ label, value, icon, colorCls, bgCls }: {
   );
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Main Page Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 export default function AntrianPage() {
   const [antrian, setAntrian] = useState<Antrian[]>([]);
   const [loading, setLoading] = useState(false);
@@ -232,8 +231,6 @@ export default function AntrianPage() {
   const [cabangNama, setCabangNama] = useState('');
   const [sessionReady, setSessionReady] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  // monitorMode = true saat Super Admin memilih cabang Ã¢â‚¬â€ sembunyikan semua aksi kelola
-  // Admin Cabang TIDAK pernah dalam monitorMode (selalu bisa kelola antrian cabangnya)
   const [monitorMode, setMonitorMode] = useState(false);
   const [cabangList, setCabangList] = useState<Cabang[]>([]);
 
@@ -284,17 +281,18 @@ export default function AntrianPage() {
     if (!cabangId) return;
     setLoading(true);
     try {
-      // Super Admin gunakan endpoint PUBLIK `/antrian` (tidak butuh token admin, sesuai docs)
-      // Admin Cabang gunakan `/antrian/detail` Ã¢â‚¬â€ data lengkap termasuk No HP, No Rangka, dll
-      // Gunakan isSuperAdmin (bukan monitorMode) agar tidak ada race condition
+      // Super Admin: endpoint PUBLIK — tidak butuh token, tidak cek cabang_id di JWT
+      //   Aman meski token admin_antrian masih mengandung cabang_id lain di backend
+      // Admin Cabang: endpoint /detail — token required, data lengkap (No HP, dll)
       const endpoint = isSuperAdmin
-        ? `/cabang/${cabangId}/antrian`        // GET /cabang/:id/antrian Ã¢â‚¬â€ publik (docs baris 59)
-        : `/cabang/${cabangId}/antrian/detail`; // GET /cabang/:id/antrian/detail Ã¢â‚¬â€ Admin (docs baris 61)
+        ? `/cabang/${cabangId}/antrian`
+        : `/cabang/${cabangId}/antrian/detail`;
       const r = await clientFetch<ApiResponse<Antrian[]>>(endpoint);
       setAntrian((r as ApiResponse<Antrian[]>).data ?? []);
     } catch { showToast('Gagal memuat data antrian', false); }
     finally { setLoading(false); }
   }, [cabangId, isSuperAdmin]);
+
 
   useEffect(() => { if (sessionReady && cabangId) loadAntrian(); }, [loadAntrian, sessionReady, cabangId]);
 
@@ -302,12 +300,13 @@ export default function AntrianPage() {
     .filter(q => {
       const s = search.toLowerCase();
       const matchSearch =
-        q.nama_pemilik.toLowerCase().includes(s) ||
-        String(q.nomor_antrian).includes(s) ||
-        q.merk_motor.toLowerCase().includes(s);
+        (q.nama_pemilik ?? '').toLowerCase().includes(s) ||
+        String(q.nomor_antrian ?? '').includes(s) ||
+        (q.merk_motor ?? '').toLowerCase().includes(s) ||
+        (q.tipe_motor ?? '').toLowerCase().includes(s);
       return matchSearch && (filterStatus === 'all' || q.status === filterStatus);
     })
-    .sort((a, b) => a.nomor_antrian - b.nomor_antrian),
+    .sort((a, b) => (a.nomor_antrian ?? 0) - (b.nomor_antrian ?? 0)),
   [antrian, search, filterStatus]);
 
   const stats = useMemo(() => ({
@@ -505,7 +504,7 @@ export default function AntrianPage() {
         </button>
       </div>
 
-      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Table Ã¢â€â‚¬Ã¢â€â‚¬ */}
+      {/* ——— Table ——— */}
       <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
         {/* Table header info */}
         <div className="flex items-center justify-between px-lg py-sm border-b border-outline-variant bg-surface-container-low">
@@ -531,7 +530,10 @@ export default function AntrianPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-surface-container-low">
-                  {['No.', 'Pemilik', 'Kendaraan', 'Estimasi', 'Reminder', 'Status', 'Aksi'].map(h => (
+                  {(isSuperAdmin
+                    ? ['No. Antrian', 'Tgl. Kedatangan', 'Estimasi', 'Status']
+                    : ['No.', 'Pemilik', 'Kendaraan', 'Estimasi', 'Reminder', 'Status', 'Aksi']
+                  ).map(h => (
                     <th key={h} className="px-lg py-3 font-label-caps text-on-surface-variant whitespace-nowrap border-b border-outline-variant">{h}</th>
                   ))}
                 </tr>
@@ -539,50 +541,75 @@ export default function AntrianPage() {
               <tbody>
                 {filtered.map((q, i) => (
                   <tr key={q.id} className={`hover:bg-surface-container-low transition-colors ${i % 2 === 0 ? '' : 'bg-surface-container-lowest/50'}`}>
-                    {/* Nomor */}
+                    {/* Nomor Antrian */}
                     <td className="px-lg py-md">
                       <div className="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
                         <span className="font-bold text-primary text-[13px]">{q.nomor_antrian}</span>
                       </div>
                     </td>
-                    {/* Pemilik Ã¢â‚¬â€ endpoint publik tidak ada no_hp */}
-                    <td className="px-lg py-md">
-                      <p className="font-label-md text-on-surface">{q.nama_pemilik ?? 'Ã¢â‚¬â€'}</p>
-                      {q.no_hp && <p className="font-body-sm text-on-surface-variant">{q.no_hp}</p>}
-                    </td>
-                    {/* Kendaraan Ã¢â‚¬â€ endpoint publik tidak ada merk_motor dll */}
-                    <td className="px-lg py-md">
-                      {q.merk_motor
-                        ? <p className="font-label-md text-on-surface">{q.merk_motor} {q.tipe_motor}</p>
-                        : <span className="text-on-surface-variant opacity-50 text-[12px]">Ã¢â‚¬â€</span>}
-                      {q.tahun_pembuatan && <p className="font-body-sm text-on-surface-variant">{q.tahun_pembuatan}</p>}
-                    </td>
-                    {/* Estimasi */}
+
+                    {/* Kolom khusus Super Admin: Tgl Kedatangan */}
+                    {isSuperAdmin && (
+                      <td className="px-lg py-md">
+                        <span className="font-body-sm text-on-surface-variant">
+                          {q.tanggal_kedatangan
+                            ? new Date(q.tanggal_kedatangan).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+                            : '—'}
+                        </span>
+                      </td>
+                    )}
+
+                    {/* Kolom khusus Admin Cabang: Pemilik */}
+                    {!isSuperAdmin && (
+                      <td className="px-lg py-md">
+                        <p className="font-label-md text-on-surface">{q.nama_pemilik ?? '—'}</p>
+                        {q.no_hp && <p className="font-body-sm text-on-surface-variant">{q.no_hp}</p>}
+                      </td>
+                    )}
+
+                    {/* Kolom khusus Admin Cabang: Kendaraan */}
+                    {!isSuperAdmin && (
+                      <td className="px-lg py-md">
+                        {q.merk_motor
+                          ? <p className="font-label-md text-on-surface">{q.merk_motor} {q.tipe_motor}</p>
+                          : <span className="text-on-surface-variant opacity-50 text-[12px]">—</span>}
+                        {q.tahun_pembuatan && <p className="font-body-sm text-on-surface-variant">{q.tahun_pembuatan}</p>}
+                      </td>
+                    )}
+
+                    {/* Estimasi — shared */}
                     <td className="px-lg py-md">
                       <div className="flex items-center gap-xs">
                         <span className="material-symbols-outlined text-on-surface-variant text-[14px]">schedule</span>
-                        <span className="font-label-md text-on-surface">{q.estimasi_jam}</span>
+                        <span className="font-label-md text-on-surface">{q.estimasi_jam ?? '—'}</span>
                       </div>
                     </td>
-                    {/* Reminder */}
-                    <td className="px-lg py-md">
-                      {q.reminder_aktif
-                        ? <span className="flex items-center gap-xs text-[12px] text-tertiary font-label-md">
-                            <span className="material-symbols-outlined text-[14px]">notifications_active</span>Aktif
-                          </span>
-                        : <span className="text-on-surface-variant opacity-40 text-[12px]">Ã¢â‚¬â€</span>}
-                    </td>
-                    {/* Status */}
+
+                    {/* Kolom khusus Admin Cabang: Reminder */}
+                    {!isSuperAdmin && (
+                      <td className="px-lg py-md">
+                        {q.reminder_aktif
+                          ? <span className="flex items-center gap-xs text-[12px] text-tertiary font-label-md">
+                              <span className="material-symbols-outlined text-[14px]">notifications_active</span>Aktif
+                            </span>
+                          : <span className="text-on-surface-variant opacity-40 text-[12px]">—</span>}
+                      </td>
+                    )}
+
+                    {/* Status — shared */}
                     <td className="px-lg py-md"><StatusBadge status={q.status} /></td>
-                    {/* Aksi */}
+
+                    {/* Aksi — hanya Admin Cabang, atau tombol Detail saja untuk Super Admin */}
                     <td className="px-lg py-md">
                       <div className="flex items-center gap-xs">
-                        <button onClick={() => setSelected(q)}
-                          className="flex items-center gap-xs border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-sm py-1 rounded-lg transition-all font-label-md text-[12px]">
-                          <span className="material-symbols-outlined text-[14px]">open_in_full</span>
-                          Detail
-                        </button>
-                        {/* Tombol aksi: hanya Admin Cabang (!isSuperAdmin) yang bisa kelola antrian */}
+                        {/* Detail: tampil untuk semua role jika ada data */}
+                        {!isSuperAdmin && (
+                          <button onClick={() => setSelected(q)}
+                            className="flex items-center gap-xs border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-sm py-1 rounded-lg transition-all font-label-md text-[12px]">
+                            <span className="material-symbols-outlined text-[14px]">open_in_full</span>
+                            Detail
+                          </button>
+                        )}
                         {!isSuperAdmin && q.status === 'menunggu' && (
                           <button onClick={() => callNext()}
                             className="flex items-center gap-xs border border-primary text-primary hover:bg-primary-fixed px-sm py-1 rounded-lg transition-all font-label-md text-[12px]">
